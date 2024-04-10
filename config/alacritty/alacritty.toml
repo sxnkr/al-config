@@ -1,0 +1,4 @@
+[window]
+padding = { x = 14, y = 10 }
+[font]
+normal = { family = "JetBrainsMono", style = "Regular" }

@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Function to send a dunst notification
+notify() {
+    dunstify -u critical -i battery "$1"
+}
+
+# Function to play a sound notification
+play_sound() {
+    # Replace '/path/to/sound/file.wav' with the actual path to your sound file
+    paplay /home/grey/.local/share/sounds/low_battery_jarvis.mp3
+}
+
+while true; do
+    # Get battery information using acpi
+    battery_info=$(acpi -b)
+    # Extract battery status and percentage using awk
+    battery_status=$(echo "$battery_info" | awk '{print $3}')
+    battery_percentage=$(echo "$battery_info" | grep -Eo "[0-9]+%")
+
+    # Check battery status and percentage conditions
+    if [[ $battery_status == "Discharging," && ${battery_percentage%%%} -lt 20 ]]; then
+        notify "Battery is discharging and below 20%!"
+        play_sound
+    elif [[ $battery_status == "Charging," && ${battery_percentage%%%} -gt 98 ]]; then
+        notify "Battery is charging and above 98%!"
+    fi
+
+    # Wait for 15 seconds before checking again
+    sleep 15
+done

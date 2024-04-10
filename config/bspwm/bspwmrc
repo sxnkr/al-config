@@ -1,0 +1,40 @@
+#! /bin/sh
+#wait until the processes have been shut down (just in case)
+pgrep -x sxhkd > /dev/null || sxhkd &
+#~/.config/polybar/colorblocks/launch.sh &
+~/.config/polybar/launch.sh &
+feh --bg-fill /asura/wallpaper.sxnkr/desktop.wall/street.png &
+##Configurations
+
+if [[ $(xrandr -q | grep 'HDMI-2 connected') ]]; then
+        xrandr  --output eDP-1 --primary --mode 1920x1080 --rotate normal --output HDMI-2 --mode 1366x768 --rotate normal --right-of eDP-1 &
+        bspc monitor HDMI-2 -d 6 7 8 9 0
+        bspc monitor eDP-1 -d 1 2 3 4 5
+else
+	bspc monitor -d 1 2 3 4 5 6 7 8 9 0
+fi
+bspc config border_width         0.58
+bspc config window_gap           12
+bspc config split_ratio          0.55
+bspc config borderless_monocle          true
+bspc config gapless_monocle             true
+bspc config paddingless_monocle         true
+bspc config single_monocle              false
+bspc config focus_follows_pointer       true
+bspc config remove_disable_monitors     true
+bspc config merge_overlapping_monitors  true
+##Window rules
+# remove all rules first
+bspc rule -r *:*
+bspc rule -a Gimp desktop='^8' state=floating follow=on
+bspc rule -a Chromium desktop='^2'
+bspc rule -a feh state=tiled
+bspc rule -a sxiv state=floating
+bspc rule -a "alacritty -e cmus" desktop=^8 state=floating
+bspc rule -a qBittorrent state=floating
+bspc rule -a Galculator state=floating
+bspc rule -a Zathura state=tiled
+bspc rule -a Firewall state=tiled
+bspc rule -a Screenkey manage=off
+bspc rule -a Lxappearance state=floating
+bspc rule -a Gpick state=floating
